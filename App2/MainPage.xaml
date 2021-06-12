@@ -1,0 +1,94 @@
+﻿<Page
+    x:Class="App2.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:App2"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid>
+        <Grid.Resources>
+            <local:LayerTempalateSelector x:Key="LayerTempalteSelector"
+                            GroupDataTemplate="{StaticResource GroupTemplateKey}"
+                            LayerDataTemplate="{StaticResource LayerTemplateKey}"/>
+
+
+            <DataTemplate x:Name="GroupList" x:Key="GroupTemplateKey" x:DataType="local:GroupUiObject">
+                <TreeViewItem ItemsSource="{x:Bind Items, Mode=OneWay}"
+                              CanDrag="False" 
+                              AllowDrop="False"  
+                              IsSelected="{x:Bind IsSelectedClone, Mode=OneWay}" 
+                              BorderThickness="{x:Bind BorderThickness, Mode=OneWay}"
+                              BorderBrush="Green">
+                    <TextBlock Text="{x:Bind Type, Mode=OneWay}"/>
+                </TreeViewItem>
+            </DataTemplate>
+
+            <DataTemplate x:Name="LayerList" x:Key="LayerTemplateKey" x:DataType="local:UiObject">
+                <TreeViewItem CanDrag="False" 
+                              AllowDrop="False"  
+                              IsSelected="{x:Bind IsSelectedClone, Mode=OneWay}"
+                              BorderThickness="{x:Bind BorderThickness, Mode=OneWay}"
+                              BorderBrush="Yellow">
+                    <TextBlock Text="{x:Bind Type, Mode=OneWay}"/>
+                </TreeViewItem>
+            </DataTemplate>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="400"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+
+        
+
+        <Grid Margin="50">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="400"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Opacity"/>
+            <Slider Grid.Row="1"
+                    Minimum="0"
+                    Maximum="100"
+                    Value="{x:Bind Model.CurrentObject.Opacity, Mode=TwoWay}"/>
+            <TextBlock Grid.Row="2" Text="Rotation"/>
+            <Slider Grid.Row="3"
+                    Minimum="0"
+                    Maximum="360"
+                    Value="{x:Bind Model.CurrentObject.Rotation, Mode=TwoWay}"/>
+            <Grid Grid.Row="1" Grid.Column="1">
+                <ListView ItemsSource="{x:Bind Model.CurrentObject.CommandSource, Mode=OneWay}"
+                          ItemClick="ListView_ItemClick"
+                          IsItemClickEnabled="True"
+                          SelectionMode="None"/>
+
+
+            </Grid>
+        </Grid >
+
+        <TreeView Grid.Column="3" 
+                  HorizontalAlignment="Right"
+                  Margin="50"
+                  SelectionMode="None"
+                  ItemsSource="{x:Bind Model.SpritesSource, Mode=OneWay}"
+                  ItemInvoked="TreeView_ItemInvoked"
+                  ItemTemplateSelector="{StaticResource LayerTempalteSelector}"
+                  Width="200"/>
+
+        <Grid Grid.Row="1">
+            <local:SpriteController ObjectSpriteModel="{x:Bind Model, Mode=OneWay}"/>
+        </Grid>
+    </Grid>
+</Page>
